@@ -4,19 +4,26 @@ public class partition {
     public static int part(int a[], int left, int right) {
         int l = left +1;
         int r = right;
+        int temp;
         while (r>l) {
-            int temp;
+            
+          
             while (a[r] > a[left]) {
                 r--;
             }
-            
             while (a[l] < a[left]) {
                 l++;
             }
+            
             temp = a[l];
             a[l] = a[r];
             a[r] = temp;
         }
+        
+        temp = a[l];
+        a[l] = a[left];
+        a[left] = temp;
+        
         return l;
     }
     
