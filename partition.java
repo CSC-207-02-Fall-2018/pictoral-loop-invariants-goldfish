@@ -5,7 +5,7 @@ public class partition {
         int l = left +1;
         int r = right;
         int temp;
-        while (r>l) {
+        while (r-l > 1) {
             
           
             while (a[r] > a[left]) {
