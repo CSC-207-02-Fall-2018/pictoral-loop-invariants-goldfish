@@ -16,10 +16,10 @@ public class partition {
         while (r-l > 1) {
             
           
-            while (a[r] > a[left]) {
+            while (a[r] > a[left] && r>left) {
                 r--;
             }
-            while (a[l] < a[left]) {
+            while (a[l] <= a[left] && l<right) {
                 l++;
             }
             if (l<r){
@@ -32,10 +32,16 @@ public class partition {
             }
            
         }
-        
-        temp = a[l];
-        a[l] = a[left];
-        a[left] = temp;
+        if (a[l]<=a[left]) {
+            temp = a[l];
+            a[l] = a[left];
+            a[left] = temp;}
+        else {
+            l--;
+            temp = a[l];
+            a[l] = a[left];
+            a[left] = temp;
+    }
         
         System.out.println("Partition ending: ");
         for (int i= 0; i<a.length; i++) {
@@ -95,7 +101,7 @@ public class partition {
                 System.out.println();
                 System.out.print("\nSMHU: " +k + m);
 
-                return select(a, m,k);
+                return select(a, m, k);
             }
             else {
                // int temp[] = new int [m - 1];
@@ -111,7 +117,107 @@ public class partition {
                 System.out.println();
                 System.out.print("\nSMH: " +k + m);
                
-                return select(a, m+1, (k - m - 1));
+                return select(a, (n - m - 1), (k - m - 1));
+            }
+        }
+    }
+    
+    static double median(int a[]) {
+        int length = a.length;
+        if (length % 2 == 1) {
+            return (double) select (a, length, (length - 1) / 2);
+        }
+        else {
+            int x = select (a, length, (length /2) );
+            System.out.println("x: " + x);
+            int y = select (a, length, (length/2) + 1);
+            System.out.println("y: " + y);
+            return ((double) x+y)/2;
+        }
+    }
+    
+    static void quicksortKernel (int a[], int left, int right) {
+        int m = part(a, left, right);
+        if(m > left + 1) {
+          quicksortKernel (a, left, m-1);
+        }
+        if (m < right - 1) {
+            quicksortKernel(a, m+1, right);
+        }
+    }
+    
+    static void quicksort (int a[]) {
+        quicksortKernel (a, 0, a.length-1);
+    }
+    
+    static void invariantA (int a[] ){
+        int red = 0;
+        int white = 0;
+        int blue = 0;
+        int unsorted = 0;
+        int temp;
+        while(unsorted < a.length) {
+            if(a[unsorted] == 2) {
+                temp = a[unsorted];
+                a[unsorted] = a[blue];
+                a[blue] = temp;
+                unsorted++;
+            }
+            else if(a[unsorted] == 1) {
+                temp = a[unsorted];
+                a[unsorted] = a[blue];
+                a[blue] = temp;
+                temp = a[blue];
+                a[blue] = a[white];
+                a[white] = temp;
+                unsorted++;
+                blue++;
+            }
+            else {
+                temp = a[unsorted];
+                a[unsorted] = a[blue];
+                a[blue] = temp;
+                temp = a[blue];
+                a[blue] = a[white];
+                a[white] = temp;
+                temp = a[white];
+                a[white] = a[red];
+                a[red] = temp;
+                unsorted++;
+                blue++;
+                white++;
+            }
+        }
+    }
+    
+    static void invariantB(int a []) {
+        int red = 0;
+        int white = 0;
+        int blue = a.length;
+        int unsorted = 0;
+        int temp;
+        while(unsorted < blue) {
+            if(a[unsorted] == 2) {
+                blue--;
+                temp = a[unsorted];
+                a[unsorted] = a[blue];
+                a[blue] = temp;
+            }
+            else if(a[unsorted] == 1) {
+                temp = a[unsorted];
+                a[unsorted] = a[white];
+                a[white] = temp;
+                unsorted++;
+            }
+            else {
+                temp = a[unsorted];
+                a[unsorted] = a[white];
+                a[white] = temp;
+                temp = a[white];
+                a[white] = a[red];
+                a[red] = temp;
+                unsorted++;
+                white++;
             }
         }
     }
@@ -136,13 +242,14 @@ public class partition {
         //5 2 2 -2 1 3 6 10 8
         //
         
-        int [] a = {-3, 4, 7, 6, 5, 8  };
+        int [] a = {2, 1, 0, 0, 1, 2, 2, 1,2, 0};
         	//{3, 6, -2, 8};
         	
         	//{1, -2, 5, 3, 4, 0, 9, 7};
       // part(a, 0, 7);
-        
-        System.out.println("HIHIHIHIHI" + select (a,6, 3));
+        //invariantA(a);
+        System.out.println("HIHIHIHIHI" + median (a));
+       // median(a);
         for (int i= 0; i<a.length; i++) {
         System.out.print(a[i]+ " ");
         }
