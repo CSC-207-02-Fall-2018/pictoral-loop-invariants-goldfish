@@ -28,9 +28,7 @@ public class partition {
 				a[l] = a[r];
 				a[r] = temp;
 			}
-			else{
-				l--;
-			}
+			
 
 		}
 		System.out.print( "l and r: "+ l +" " +r);
