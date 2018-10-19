@@ -1,180 +1,199 @@
 package loopInvariants;
 
+/**
+ * 
+ * @author Aidan Danbury and Mai Phuong Vu
+ * class partition contains various methods that modify and sort arrays
+ */
 public class partition {
+    /**partition takes in an array, and places the left value of it in between the segment of
+     *    the array that is being partitioned in between values that are smaller than it and
+     *    values that are larger than it
+     * Preconditions:
+     *    @param a, an array of ints
+     *    @param left, an int that is the location of the leftmost value of a that
+     *       will be partitioned, and the location of the value that will be partitioned on
+     *    @param right, an int that is the location of the rightmost value of a that
+     *       will be partitioned.
+     *    0 <= left <= right <= length of a - 1
+     * Postconditions:
+     *    left is moved to position l, the position that results when all the elements before l
+     *       are smaller or equal to a[left] and all elements after l are larger or equal to left
+     *    @return l, the position that value a[left] was moved to.
+     */
 	public static int part(int a[], int left, int right) {
-
-		/*System.out.println("Partition beginning: ");
-		for (int i= 0; i<a.length; i++) {
-			System.out.print( a[i] + " ");
-		}
-		System.out.println();
-		*/
-
-
-		int l = left +1;
+		int l = left + 1;
 		int r = right;
 		int temp;
-		//System.out.print( "FIRST l and r: "+ l +" " +r);
-		while (r-l > 1) {
-
-
-			while (a[r] > a[left] && r>left) {
+		
+		//the loop runs until all the elements between right and left have been searched
+		while (r - l > 1) {
+		    //values that are unsorted in relation to a[left] are swapped
+			while (a[r] > a[left] && r > left) {
 				r--;
 			}
-			while (a[l] <= a[left] && l<right) {
+			while (a[l] <= a[left] && l < right) {
 				l++;
 			}
-			if (l<r){
+			if (l < r){
 				temp = a[l];
 				a[l] = a[r];
 				a[r] = temp;
 			}
-			/*else{
-				l--;
-			}*/
-
 		}
 		
-		/*System.out.print( "l and r: "+ l +" " +r);
-		if (a[r]< a[l]){
-			temp = a[r];
-			a[r]=a[l];
-			a[l]=temp;
-		}*/
-		
-		if (a[l]<a[left]) {
+		//code double checks that left was partitioned on correctly
+		if (a[l] < a[left]) {
 			temp = a[l];
 			a[l] = a[left];
 			a[left] = temp;}
-		else if (l!=0){
-
+		else if (l != 0){
 			l--;
 			temp = a[l];
 			a[l] = a[left];
 			a[left] = temp;
-
 		}
-
-		/*System.out.println("Partition ending: ");
-		for (int i= 0; i<a.length; i++) {
-			System.out.print( a[i]+ " ");
-		}
-		System.out.println();
-
-
-		System.out.println("mid value" + l);*/
 
 		return l;
 	}
 
+	/**
+	 * subarray takes an array and returns a specified segment of that array 
+	 * Preconditions:
+	 *    @param a, an int array
+	 *    @param start, an int that is the initial location of the output segment
+	 *    @param end, an int that is the final location of the output segment
+	 *    end >= start
+	 * Postconditions:
+	 *    @return temp, an int array that is of length (end - start + 1) that consists
+	 *       of values that correspond to the values in a from positions start to end
+	 */
 	public static int[] subarray (int a[], int start, int end) {
 		int temp[] =  new int [end - start + 1];
 		for (int i = 0; start <= end; start++, i++) {
-			temp[i]=a[start];
+			temp[i] = a[start];
 		}
-		/*System.out.println("End of subarray: ");
-		for (int i= 0; i<temp.length; i++) {
-			System.out.print( temp[i]+ " ");
-		}
-		System.out.println();*/
-		return temp; 
 
+		return temp; 
 	}
 
+	/**
+	 * select returns the value in a of the kth smallest element in int array a
+	 * Preconditions:
+	 *    @param a, an int array that is the input
+	 *    @param n, an int that is the number of elements in a
+	 *    @param k, an int that is the desired kth smallest element in a
+	 *    k <= n
+	 * Postconditions:
+	 *    @return an int that is the value in a that is the kth smallest element
+	 */
 	public static int select (int a[], int n, int k) {
+	    //base case if there is one element in a
 		if(n == 1) {
 			return a[n - 1];
 		}
 		else {
-			int m = part (a, 0, n-1);
-
-
-		/*	System.out.println("beginning of select ");
-			for (int i= 0; i<a.length; i++) {
-				System.out.print( a[i]+ " ");
-			}
-			System.out.println();
-*/
-
-			if(k == m +1){
+		    //partition is used as necessary to sort a
+			int m = part (a, 0, n - 1);
+			//returns if the kth value is the middle result of part
+			if(k == m + 1){
 				return a[m];   
 			}
-
-			// 3 1 7 9 
-
+			//case where the kth element is before middle value
 			else if (k <= m) {
-				// int temp[] = new int [m - 1];
 				a = subarray (a, 0, m );
-
-				/*System.out.println("IF k < n: ");
-				for (int i= 0; i<a.length; i++) {
-					System.out.print( a[i]+ " ");
-				}
-				System.out.println();
-				System.out.print("\nSMHU: " +k + m);*/
-
 				return select(a, m, k);
 			}
+			//case where the kth element is after middle value
 			else {
-				// int temp[] = new int [m - 1];
-
-				//{3, -2, 6, 8};
-				//
-
 				a = subarray (a, m + 1, n-1);
-				/*System.out.println("If k > n ");
-				for (int i= 0; i<a.length; i++) {
-					System.out.print( a[i]+ " ");
-				}
-				System.out.println();
-				System.out.print("\nSMH: " +k + m);*/
-
 				return select(a, (n - m - 1), (k - m - 1));
 			}
 		}
 	}
 
-	static double median(int a[]) {
+	/**
+	 * median returns a double that is the median of a
+	 * Preconditions:
+	 *    @param a, an int array one wants to find the median of
+	 * Postcondtions:
+	 *    @return an int that is the median value: the middle value of the set
+	 *    if there is an even number, it returns the average of the two middle values
+	 */
+	public static double median (int a[]) {
 		int length = a.length;
 		if (length % 2 == 1) {
 			return (double) select (a, length, (length + 1) / 2);
 		}
 		else {
-			int x = select (a, length, (length /2) );
+			int x = select (a, length, (length / 2) );
 			System.out.println("x: " + x);
-			int y = select (a, length, (length/2) + 1);
+			int y = select (a, length, (length/ 2) + 1);
 			System.out.println("y: " + y);
-			return ((double) x+y)/2;
+			return ((double) x + y)/2;
 		}
 	}
 
-	static void quicksortKernel (int a[], int left, int right) {
+	/**
+	 * quicksortKernel helps quicksort sort an array
+	 * Preconditions:
+	 *    @param a, an int array
+	 *    @param left, an int that is the position of the leftmost segment of a
+	 *       that is to be sorted
+	 *    @param right, an int that is the position of the rightmost segment of a
+     *       that is to be sorted
+	 * Postconditions:
+	 *    a is sorted in ascending order
+	 */
+	public static void quicksortKernel (int a[], int left, int right) {
+	    //quicksortKernel recursively uses partition to quicksort a
 		int m = part(a, left, right);
 		if(m > left + 1) {
-			quicksortKernel (a, left, m-1);
+			quicksortKernel (a, left, m - 1);
 		}
 		if (m < right - 1) {
-			quicksortKernel(a, m+1, right);
+			quicksortKernel(a, m + 1, right);
 		}
 	}
 
-	static void quicksort (int a[]) {
+	/**
+	 * quicksort sorts an array
+	 * Preconditions:
+	 *    @param a, an int array
+	 * Postconditions:
+	 *    a is sorted in ascending order
+	 */
+	public static void quicksort (int a[]) {
 		quicksortKernel (a, 0, a.length-1);
 	}
 
-	static void invariantA (int a[] ){
+	/**
+	 * invariantA solves the Dutch Flag problem with the red, white, and blue segments of the
+	 *    array on the left of the unsorted segment of the array
+	 * Preconditions:
+	 *    @param a, an int array containing only values 0, 1, and 2
+	 *       (representing red, white, and blue respectively)
+	 * Postconditions:
+	 *    a is sorted
+	 */
+	public static void invariantA (int a[] ){
+	    //positions of the segments initialized
 		int red = 0;
 		int white = 0;
 		int blue = 0;
 		int unsorted = 0;
 		int temp;
+		
+		//loop finishes when unsorted is empty
 		while(unsorted < a.length) {
+		    //case in which a[unsorted] is blue
 			if(a[unsorted] == 2) {
 				temp = a[unsorted];
 				a[unsorted] = a[blue];
 				a[blue] = temp;
 				unsorted++;
 			}
+			//case in which a[unsorted] is white
 			else if(a[unsorted] == 1) {
 				temp = a[unsorted];
 				a[unsorted] = a[blue];
@@ -185,6 +204,7 @@ public class partition {
 				unsorted++;
 				blue++;
 			}
+			//case in which a[unsorted] is red
 			else {
 				temp = a[unsorted];
 				a[unsorted] = a[blue];
@@ -202,25 +222,41 @@ public class partition {
 		}
 	}
 
-	static void invariantB(int a []) {
+	/**
+     * invariantB solves the Dutch Flag problem with the red and white segments of the
+     *    array on the left of the unsorted segment of the array and the blue segment
+     *    of the array on the right of unsorted
+     * Preconditions:
+     *    @param a, an int array containing only values 0, 1, and 2
+     *       (representing red, white, and blue respectively)
+     * Postconditions:
+     *    a is sorted
+     */
+	public static void invariantB(int a []) {
+        //positions of the segments initialized
 		int red = 0;
 		int white = 0;
 		int blue = a.length;
 		int unsorted = 0;
 		int temp;
+
+        //loop finishes when unsorted is empty
 		while(unsorted < blue) {
+		  //case in which a[unsorted] is blue
 			if(a[unsorted] == 2) {
 				blue--;
 				temp = a[unsorted];
 				a[unsorted] = a[blue];
 				a[blue] = temp;
 			}
+			//case in which a[unsorted] is white
 			else if(a[unsorted] == 1) {
 				temp = a[unsorted];
 				a[unsorted] = a[white];
 				a[white] = temp;
 				unsorted++;
 			}
+			//case in which a[unsorted] is red
 			else {
 				temp = a[unsorted];
 				a[unsorted] = a[white];
@@ -234,6 +270,13 @@ public class partition {
 		}
 	}
 
+	/**
+	 * main tests the previous methods
+	 * Preconditions:
+	 *    none
+	 * Postconditions:
+	 *    previous methods are tested
+	 */
 	public static void main(String args []) {
 		
 		/*INVERSE, ODD LIST*/
@@ -364,50 +407,6 @@ public class partition {
 			System.out.print(d_sort[i]+ " ");
 		}
 		System.out.println();
-		/*//  int [] a = {3, 6, 2, 9};
-		//{3,6,2, 9,7, 4, 1};
-		int [] b = {3};
-		//  int m = part(a, 0, 3);
-		/*    System.out.println("m: " + m + "\narray: "
-                            + a[0] + " " + a[1] + " " + a[2]
-                            + " " + a[3] + " " //+ a[4]//+" " + a[5] + " " + a[6] + " " 
-                            );
-       // System.out.println(select (a, 7, 2));
-      // System.out.println( select (b, 1, 1));
-       /* int [] k = subarray (a, 0, 3);
-        System.out.println("array: "
-                + k[0] + " " + k[1] + " " + k[2]
-                + " " + k[3]);*/
-                //int [] a = {5, 2  , 1, 3, -2 , 10, 2, -2, 8};
-                //5 2 2 6 1 3 -2 10 8
-                //5 2 2 -2 1 3 6 10 8
-		//
-
-		/*int [] a = {1, -2, 5, 3, 4, 0, 9, 7};
-		//{3, 6, -2, 8};
-
-		//{1, -2, 5, 3, 4, 0, 9, 7};
-		//part(a, 0, 9);
-		//invariantA(a);
-		System.out.println("HIHIHIHIHI" + median (a));
-		// median(a);
-		for (int i= 0; i<a.length; i++) {
-			System.out.print(a[i]+ " ");
-		}*/
-		
-
-		//int [] b = {1, -2, 5, 3, 4, 0, 9, 7};
-		//{3, 6, -2, 8};
-
-		//{1, -2, 5, 3, 4, 0, 9, 7};
-		//part(a, 0, 9);
-		//invariantA(a);
-		/*System.out.println("HIHIHIHIHI" + median (b));
-		// median(a);
-		for (int i= 0; i<b.length; i++) {
-			System.out.print(b[i]+ " ");
-		}*/
-		
 	}
 
 }
