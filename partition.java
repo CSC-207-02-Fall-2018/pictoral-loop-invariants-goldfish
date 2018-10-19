@@ -3,17 +3,18 @@ package loopInvariants;
 public class partition {
 	public static int part(int a[], int left, int right) {
 
-		System.out.println("Partition beginning: ");
+		/*System.out.println("Partition beginning: ");
 		for (int i= 0; i<a.length; i++) {
 			System.out.print( a[i] + " ");
 		}
 		System.out.println();
+		*/
 
 
 		int l = left +1;
 		int r = right;
 		int temp;
-		System.out.print( "FIRST l and r: "+ l +" " +r);
+		//System.out.print( "FIRST l and r: "+ l +" " +r);
 		while (r-l > 1) {
 
 
@@ -28,15 +29,19 @@ public class partition {
 				a[l] = a[r];
 				a[r] = temp;
 			}
-			
+			/*else{
+				l--;
+			}*/
 
 		}
-		System.out.print( "l and r: "+ l +" " +r);
+		
+		/*System.out.print( "l and r: "+ l +" " +r);
 		if (a[r]< a[l]){
 			temp = a[r];
 			a[r]=a[l];
 			a[l]=temp;
-		}
+		}*/
+		
 		if (a[l]<a[left]) {
 			temp = a[l];
 			a[l] = a[left];
@@ -50,14 +55,14 @@ public class partition {
 
 		}
 
-		System.out.println("Partition ending: ");
+		/*System.out.println("Partition ending: ");
 		for (int i= 0; i<a.length; i++) {
 			System.out.print( a[i]+ " ");
 		}
 		System.out.println();
 
 
-		System.out.println("mid value" + l);
+		System.out.println("mid value" + l);*/
 
 		return l;
 	}
@@ -67,11 +72,11 @@ public class partition {
 		for (int i = 0; start <= end; start++, i++) {
 			temp[i]=a[start];
 		}
-		System.out.println("End of subarray: ");
+		/*System.out.println("End of subarray: ");
 		for (int i= 0; i<temp.length; i++) {
 			System.out.print( temp[i]+ " ");
 		}
-		System.out.println();
+		System.out.println();*/
 		return temp; 
 
 	}
@@ -84,12 +89,12 @@ public class partition {
 			int m = part (a, 0, n-1);
 
 
-			System.out.println("beginning of select ");
+		/*	System.out.println("beginning of select ");
 			for (int i= 0; i<a.length; i++) {
 				System.out.print( a[i]+ " ");
 			}
 			System.out.println();
-
+*/
 
 			if(k == m +1){
 				return a[m];   
@@ -101,12 +106,12 @@ public class partition {
 				// int temp[] = new int [m - 1];
 				a = subarray (a, 0, m );
 
-				System.out.println("IF k < n: ");
+				/*System.out.println("IF k < n: ");
 				for (int i= 0; i<a.length; i++) {
 					System.out.print( a[i]+ " ");
 				}
 				System.out.println();
-				System.out.print("\nSMHU: " +k + m);
+				System.out.print("\nSMHU: " +k + m);*/
 
 				return select(a, m, k);
 			}
@@ -117,12 +122,12 @@ public class partition {
 				//
 
 				a = subarray (a, m + 1, n-1);
-				System.out.println("If k > n ");
+				/*System.out.println("If k > n ");
 				for (int i= 0; i<a.length; i++) {
 					System.out.print( a[i]+ " ");
 				}
 				System.out.println();
-				System.out.print("\nSMH: " +k + m);
+				System.out.print("\nSMH: " +k + m);*/
 
 				return select(a, (n - m - 1), (k - m - 1));
 			}
@@ -132,7 +137,7 @@ public class partition {
 	static double median(int a[]) {
 		int length = a.length;
 		if (length % 2 == 1) {
-			return (double) select (a, length, (length - 1) / 2);
+			return (double) select (a, length, (length + 1) / 2);
 		}
 		else {
 			int x = select (a, length, (length /2) );
@@ -230,7 +235,136 @@ public class partition {
 	}
 
 	public static void main(String args []) {
-		//  int [] a = {3, 6, 2, 9};
+		
+		/*INVERSE, ODD LIST*/
+		System.out.println("A is an inverse ordered, odd number lengthed array: ");
+		int [] a = {9,8, 7, 6, 5};
+		
+		System.out.println("PARTITION: ");
+		int [] a_part = a;
+		System.out.println("Middle - partition for A: " + part(a_part, 0, 4));
+		System.out.println("A after partition: ");
+		for (int i= 0; i<a_part.length; i++) {
+			System.out.print(a_part[i]+ " ");
+		}
+		System.out.println();
+		
+		System.out.println("\nSELECT: ");
+		int [] a_select = a;
+		
+		for (int i= 1; i<=a_select.length; i++) {
+			System.out.println("#"+i +" smallest " + select(a_select, 5, i));
+		}
+		
+		int [] a_median = a;
+		System.out.println("\nMEDIAN: ");
+		System.out.println("median of A: " + median(a_median));
+		
+		int [] a_sort = a;
+		System.out.println("\nQUICK SORT: ");
+		quicksort(a_sort);
+		for (int i= 0; i<a_sort.length; i++) {
+			System.out.print(a_sort[i]+ " ");
+		}
+		System.out.println();
+		
+		/*B IS INVERSE ORDERED AND EVEN*/
+		System.out.println("\nB is an inversely ordered, even lengthed array: ");
+		int [] b = {5, 4, 3, 2};
+		
+		System.out.println("PARTITION: ");
+		int [] b_part = b;
+		System.out.println("Middle - partition for B: " + part(b_part, 0, 3));
+		System.out.println("B after partition: ");
+		for (int i= 0; i<b_part.length; i++) {
+			System.out.print(b_part[i]+ " ");
+		}
+		System.out.println();
+		
+		System.out.println("\nSELECT: ");
+		int [] b_select = b;
+		
+		for (int i= 1; i<=b_select.length; i++) {
+			System.out.println("#"+i +" smallest " + select(b_select, 4, i));
+		}
+		
+		int [] b_median = b;
+		System.out.println("\nMEDIAN: ");
+		System.out.println("median of B: " + median(b_median));
+		
+		int [] b_sort = b;
+		System.out.println("\nQUICK SORT: ");
+		quicksort(b_sort);
+		for (int i= 0; i<b_sort.length; i++) {
+			System.out.print(b_sort[i]+ " ");
+		}
+		System.out.println();
+		
+		
+		/*C IS ORDERED AND ODD*/
+		System.out.println("\nC is an inverse ordered, odd lengthed array: ");
+		int [] c = {1, 2, 3, 4, 5};
+		
+		System.out.println("PARTITION: ");
+		int [] c_part = c;
+		System.out.println("Middle - partition for C: " + part(c_part, 0, 4));
+		System.out.println("C after partition: ");
+		for (int i= 0; i<c_part.length; i++) {
+			System.out.print(c_part[i]+ " ");
+		}
+		System.out.println();
+		
+		System.out.println("\nSELECT: ");
+		int [] c_select = c;
+		
+		for (int i= 1; i<=c_select.length; i++) {
+			System.out.println("#"+i +" smallest " + select(c_select, 5, i));
+		}
+		
+		int [] c_median = c;
+		System.out.println("\nMEDIAN: ");
+		System.out.println("median of C: " + median(c_median));
+		
+		int [] c_sort = c;
+		System.out.println("\nQUICK SORT: ");
+		quicksort(c_sort);
+		for (int i= 0; i<c_sort.length; i++) {
+			System.out.print(c_sort[i]+ " ");
+		}
+		System.out.println();
+		
+		/*D IS ORDERED AND EVEN*/
+		System.out.println("\nD is an ordered, even lengthed array: ");
+		int [] d = {1, 2, 3, 4};
+		
+		System.out.println("PARTITION: ");
+		int [] d_part = d;
+		System.out.println("Middle - partition for D: " + part(d_part, 0, 3));
+		System.out.println("D after partition: ");
+		for (int i= 0; i<d_part.length; i++) {
+			System.out.print(d_part[i]+ " ");
+		}
+		System.out.println();
+		
+		System.out.println("\nSELECT: ");
+		int [] d_select = d;
+		
+		for (int i= 1; i<=d_select.length; i++) {
+			System.out.println("#"+i +" smallest " + select(d_select, 4, i));
+		}
+		
+		int [] d_median = d;
+		System.out.println("\nMEDIAN: ");
+		System.out.println("median of D: " + median(d_median));
+		
+		int [] d_sort = d;
+		System.out.println("\nQUICK SORT: ");
+		quicksort(d_sort);
+		for (int i= 0; i<d_sort.length; i++) {
+			System.out.print(d_sort[i]+ " ");
+		}
+		System.out.println();
+		/*//  int [] a = {3, 6, 2, 9};
 		//{3,6,2, 9,7, 4, 1};
 		int [] b = {3};
 		//  int m = part(a, 0, 3);
@@ -249,7 +383,7 @@ public class partition {
                 //5 2 2 -2 1 3 6 10 8
 		//
 
-		int [] a = {1, -2, 5, 3, 4, 0, 9, 7};
+		/*int [] a = {1, -2, 5, 3, 4, 0, 9, 7};
 		//{3, 6, -2, 8};
 
 		//{1, -2, 5, 3, 4, 0, 9, 7};
@@ -259,6 +393,21 @@ public class partition {
 		// median(a);
 		for (int i= 0; i<a.length; i++) {
 			System.out.print(a[i]+ " ");
-		}
+		}*/
+		
+
+		//int [] b = {1, -2, 5, 3, 4, 0, 9, 7};
+		//{3, 6, -2, 8};
+
+		//{1, -2, 5, 3, 4, 0, 9, 7};
+		//part(a, 0, 9);
+		//invariantA(a);
+		/*System.out.println("HIHIHIHIHI" + median (b));
+		// median(a);
+		for (int i= 0; i<b.length; i++) {
+			System.out.print(b[i]+ " ");
+		}*/
+		
 	}
+
 }
